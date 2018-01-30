@@ -4,6 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var session = require('express-session')
+
+mongoose.connect('mongodb://localhost/nodedola')
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -21,6 +25,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({
+  resave: true,
+  saveUninitialized: false,
+  secret: 'nodedola'
+}))
 
 app.use('/', index);
 app.use('/users', users);
