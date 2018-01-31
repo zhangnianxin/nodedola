@@ -37,7 +37,21 @@ router.post('/api/register', function(req, res, next) {
 });
 
 router.post('/api/login', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  var usename = req.body.username;
+  var pwd = req.body.pwd;
+  var result = {
+    code: 1,
+    message: "登录成功"
+  };
+  UserModel.UserModel.find({username:username,pwd:pwd},(err,docs)=>{
+    if(docs.length == 0) {
+      result.code = -101;
+      result.message = "您的账号或密码错误，请重新登录!"
+    }else{
+      req.session.username = username;
+    }
+    res.json(result);
+  })
 });
 
 module.exports = router;
